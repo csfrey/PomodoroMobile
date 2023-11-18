@@ -2,13 +2,13 @@ const buttonTypes = {
   start: "START",
   pause: "PAUSE",
   skip: "SKIP",
-  cont: "CONTINUE",
+  continue: "CONTINUE",
   reset: "RESET",
 };
 
 const runStates = {
-  waiting: "WAITING",
-  paused: "PAUSED",
+  waiting: "WAITING", // waiting to start
+  paused: "PAUSED", // paused mid-process
   running: "RUNNING",
 };
 

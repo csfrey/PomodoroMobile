@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { View } from "react-native";
 import { buttonTypes, timerStates, runStates } from "./constants";
 import Body from "./components/body";
 import Buttons from "./components/buttons";
 
-const FiveMinutes = 1000 * 60 * 5;
-const FifteenMinutes = 1000 * 60 * 15;
-const TwentyfiveMinutes = 1000 * 60 * 25;
+const ShortRest = 1000 * 60 * 5; // 5 minutes
+const LongRest = 1000 * 60 * 15; // 15 minutes
+const WorkPeriod = 1000 * 60 * 25; // 25 minutes
 
 // let timerInterval;
 
@@ -14,8 +14,8 @@ export default function App() {
   const [set, setSet] = useState(1);
   const [round, setRound] = useState(1);
   const [timerState, setTimerState] = useState(timerStates.work);
-  const [timerVal, setTimerVal] = useState(TwentyfiveMinutes);
-  const [runState, setRunState] = useState(runStates.waiting); // "paused" means in the middle of a state
+  const [runState, setRunState] = useState(runStates.waiting);
+  const [timerVal, setTimerVal] = useState(WorkPeriod);
 
   useEffect(() => {
     let timerInterval = setInterval(() => {
@@ -25,7 +25,7 @@ export default function App() {
     }, 1000);
 
     return () => clearInterval(timerInterval);
-  }, [runState]);
+  });
 
   const state = {
     set,
@@ -40,8 +40,7 @@ export default function App() {
     setRunState,
   };
 
-  if (timerVal <= 0) {
-    pauseTimer();
+  if (timerVal < 0) {
     progressTimerState(state);
   }
 
@@ -76,16 +75,18 @@ function progressTimerState(state) {
     setRunState,
   } = state;
 
+  handlePause(state);
+
   switch (timerState) {
     case timerStates.work:
       if (set % 4 === 0) {
         setTimerState(timerStates.longRest);
         setRunState(runStates.waiting);
-        setTimerVal(FifteenMinutes);
+        setTimerVal(LongRest);
       } else {
         setTimerState(timerStates.rest);
         setRunState(runStates.waiting);
-        setTimerVal(FiveMinutes);
+        setTimerVal(ShortRest);
       }
       break;
 
@@ -93,7 +94,7 @@ function progressTimerState(state) {
       setSet(set + 1);
       setTimerState(timerStates.work);
       setRunState(runStates.waiting);
-      setTimerVal(TwentyfiveMinutes);
+      setTimerVal(WorkPeriod);
       break;
 
     case timerStates.longRest:
@@ -101,7 +102,7 @@ function progressTimerState(state) {
       setSet(1);
       setTimerState(timerStates.work);
       setRunState(runStates.waiting);
-      setTimerVal(TwentyfiveMinutes);
+      setTimerVal(WorkPeriod);
       break;
 
     default:
@@ -123,7 +124,7 @@ function handleButtonClick(buttonClicked, state) {
       handleSkip(state);
       break;
 
-    case buttonTypes.cont:
+    case buttonTypes.continue:
       handleStart(state);
       break;
 
@@ -151,11 +152,5 @@ function handleReset(state) {
   setRound(1);
   setTimerState(timerStates.work);
   setRunState(runStates.waiting);
-  setTimerVal(TwentyfiveMinutes);
+  setTimerVal(WorkPeriod);
 }
-
-// Same as start? Consider combining.
-// function handleContinue(state) {
-//   startTimer(state);
-//   state.setRunState(runStates.running);
-// }
