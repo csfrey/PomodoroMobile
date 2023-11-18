@@ -1,6 +1,6 @@
 # PomodoroMobile
 
-### _A React Native tech demo_
+### _A React Native Tech Demo_
 
 This application is a simple tech demo implementation of a Pomodoro Timer written in React Native.
 
