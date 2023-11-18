@@ -1,22 +1,136 @@
-import { View, useWindowDimensions } from "react-native";
-import { runStates, styles } from "../constants";
+import { View, Text, useWindowDimensions, Pressable } from "react-native";
+import { buttonTypes, runStates, styles } from "../constants";
 
 const Buttons = (props) => {
+  const { width } = useWindowDimensions();
   const { state, onButtonClick } = props;
   const { runState } = state;
 
-  const { height, width } = useWindowDimensions();
-
-  let start = <div className="start-btn">START</div>;
-
-  let continueOrReset = (
-    <div className="two-btn-container">
-      <div className="continue-btn">CONTINUE</div>
-      <div className="reset-btn">RESET</div>
-    </div>
+  let start = (
+    <Pressable
+      style={{
+        height: "100%",
+        width: "100%",
+        justifyContent: "center",
+        backgroundColor: styles.green,
+      }}
+      onPress={() => onButtonClick(buttonTypes.start)}
+    >
+      <Text
+        className="start-btn"
+        style={{
+          fontFamily: "JetBrainsMono_400Regular",
+          color: "black",
+          fontSize: width / 8,
+          textAlign: "center",
+        }}
+      >
+        START
+      </Text>
+    </Pressable>
   );
 
-  let pause = <div className="pause-btn">PAUSE</div>;
+  let pause = (
+    <View
+      style={{
+        flexDirection: "row",
+        height: "100%",
+        width: "100%",
+      }}
+    >
+      <Pressable
+        style={{
+          flex: 1,
+          height: "100%",
+          justifyContent: "center",
+          backgroundColor: styles.yellow,
+        }}
+        onPress={() => onButtonClick(buttonTypes.pause)}
+      >
+        <Text
+          style={{
+            fontFamily: "JetBrainsMono_400Regular",
+            color: "black",
+            fontSize: width / 12,
+            textAlign: "center",
+          }}
+        >
+          PAUSE
+        </Text>
+      </Pressable>
+      <Pressable
+        style={{
+          flex: 1,
+          height: "100%",
+          justifyContent: "center",
+          backgroundColor: styles.orange,
+        }}
+        onPress={() => onButtonClick(buttonTypes.skip)}
+      >
+        <Text
+          style={{
+            fontFamily: "JetBrainsMono_400Regular",
+            color: "black",
+            fontSize: width / 12,
+            textAlign: "center",
+          }}
+        >
+          SKIP
+        </Text>
+      </Pressable>
+    </View>
+  );
+
+  let continueOrReset = (
+    <View
+      style={{
+        flexDirection: "row",
+        height: "100%",
+        width: "100%",
+      }}
+    >
+      <Pressable
+        style={{
+          flex: 1,
+          height: "100%",
+          justifyContent: "center",
+          backgroundColor: styles.yellow,
+        }}
+        onPress={() => onButtonClick(buttonTypes.continue)}
+      >
+        <Text
+          style={{
+            fontFamily: "JetBrainsMono_400Regular",
+            color: "black",
+            fontSize: width / 12,
+            textAlign: "center",
+          }}
+        >
+          CONTINUE
+        </Text>
+      </Pressable>
+      <Pressable
+        style={{
+          flex: 1,
+          height: "100%",
+          justifyContent: "center",
+          backgroundColor: styles.orange,
+        }}
+        onPress={() => onButtonClick(buttonTypes.reset)}
+      >
+        <Text
+          style={{
+            fontFamily: "JetBrainsMono_400Regular",
+            color: "black",
+            fontSize: width / 12,
+            textAlign: "center",
+          }}
+        >
+          RESET
+        </Text>
+      </Pressable>
+    </View>
+  );
 
   let content;
 
@@ -40,11 +154,12 @@ const Buttons = (props) => {
   return (
     <View
       style={{
-        backgroundColor: styles.green,
         height: width / 2,
         width: "100%",
       }}
-    ></View>
+    >
+      {content}
+    </View>
   );
 };
 

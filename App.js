@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { buttonTypes, timerStates, runStates } from "./constants";
 import Body from "./components/body";
@@ -8,7 +8,7 @@ const FiveMinutes = 1000 * 60 * 5;
 const FifteenMinutes = 1000 * 60 * 15;
 const TwentyfiveMinutes = 1000 * 60 * 25;
 
-let timerInterval;
+// let timerInterval;
 
 export default function App() {
   const [set, setSet] = useState(1);
@@ -16,6 +16,16 @@ export default function App() {
   const [timerState, setTimerState] = useState(timerStates.work);
   const [timerVal, setTimerVal] = useState(TwentyfiveMinutes);
   const [runState, setRunState] = useState(runStates.waiting); // "paused" means in the middle of a state
+
+  useEffect(() => {
+    let timerInterval = setInterval(() => {
+      if (runState === runStates.running) {
+        setTimerVal(timerVal - 1000);
+      }
+    }, 1000);
+
+    return () => clearInterval(timerInterval);
+  }, [runState]);
 
   const state = {
     set,
@@ -48,40 +58,23 @@ export default function App() {
       <Body state={state} />
       <Buttons
         state={state}
-        isRunning={!!timerInterval}
-        onButtonClick={(e) => handleButtonClick(e.target.value, state)}
+        onButtonClick={(btn) => handleButtonClick(btn, state)}
       />
     </View>
   );
 }
 
-// const appStyles = StyleSheet.create({
-//   container: {
-//     backgroundColor: "lavender",
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   jetbrainsmonoRegular: {
-//     fontFamily: "JetBrainsMono-Regular",
-//     fontSize: 20,
-//   },
-// });
-
-function startTimer(state) {
-  const { timerVal, setTimerVal } = state;
-
-  timerInterval = setInterval(() => {
-    setTimerVal(timerVal - 1000);
-  }, 1000);
-}
-
-function pauseTimer() {
-  clearInterval(timerInterval);
-}
-
 function progressTimerState(state) {
-  const { set, timerState, setTimerState, setTimerVal, setRunState } = state;
+  const {
+    set,
+    setSet,
+    round,
+    setRound,
+    timerState,
+    setTimerState,
+    setTimerVal,
+    setRunState,
+  } = state;
 
   switch (timerState) {
     case timerStates.work:
@@ -97,7 +90,15 @@ function progressTimerState(state) {
       break;
 
     case timerStates.rest:
+      setSet(set + 1);
+      setTimerState(timerStates.work);
+      setRunState(runStates.waiting);
+      setTimerVal(TwentyfiveMinutes);
+      break;
+
     case timerStates.longRest:
+      setRound(round + 1);
+      setSet(1);
       setTimerState(timerStates.work);
       setRunState(runStates.waiting);
       setTimerVal(TwentyfiveMinutes);
@@ -118,6 +119,10 @@ function handleButtonClick(buttonClicked, state) {
       handlePause(state);
       break;
 
+    case buttonTypes.skip:
+      handleSkip(state);
+      break;
+
     case buttonTypes.cont:
       handleStart(state);
       break;
@@ -129,21 +134,24 @@ function handleButtonClick(buttonClicked, state) {
 }
 
 function handleStart(state) {
-  startTimer(state);
   state.setRunState(runStates.running);
 }
 
 function handlePause(state) {
-  pauseTimer();
-  //   state.setTimerState(timerStates.pause);
   state.setRunState(runStates.paused);
 }
 
+function handleSkip(state) {
+  progressTimerState(state);
+}
+
 function handleReset(state) {
-  pauseTimer();
-  state.setTimerState(timerStates.work);
-  state.setRunState(runStates.waiting);
-  state.setTimerVal(TwentyfiveMinutes);
+  const { setSet, setRound, setTimerState, setRunState, setTimerVal } = state;
+  setSet(1);
+  setRound(1);
+  setTimerState(timerStates.work);
+  setRunState(runStates.waiting);
+  setTimerVal(TwentyfiveMinutes);
 }
 
 // Same as start? Consider combining.
