@@ -1,8 +1,11 @@
-import { runStates } from "../constants";
+import { View, useWindowDimensions } from "react-native";
+import { runStates, styles } from "../constants";
 
-export default Buttons = (props) => {
+const Buttons = (props) => {
   const { state, onButtonClick } = props;
   const { runState } = state;
+
+  const { height, width } = useWindowDimensions();
 
   let start = <div className="start-btn">START</div>;
 
@@ -34,5 +37,15 @@ export default Buttons = (props) => {
       throw new Error("bad run state");
   }
 
-  return <div className="buttons-container">{content}</div>;
+  return (
+    <View
+      style={{
+        backgroundColor: styles.green,
+        height: width / 2,
+        width: "100%",
+      }}
+    ></View>
+  );
 };
+
+export default Buttons;

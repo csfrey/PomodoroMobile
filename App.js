@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { buttonTypes, styles, timerStates, runStates } from "./constants";
-import { Body, Buttons } from "./components";
+import { StyleSheet, View, Dimensions } from "react-native";
+import { buttonTypes, timerStates, runStates } from "./constants";
+import Body from "./components/body";
+import Buttons from "./components/buttons";
 
 const FiveMinutes = 1000 * 60 * 5;
 const FifteenMinutes = 1000 * 60 * 15;
@@ -35,7 +36,15 @@ export default function App() {
   }
 
   return (
-    <View style={StyleSheet.container}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "yellow",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
       <Body state={state} />
       <Buttons
         state={state}
@@ -45,6 +54,19 @@ export default function App() {
     </View>
   );
 }
+
+// const appStyles = StyleSheet.create({
+//   container: {
+//     backgroundColor: "lavender",
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   jetbrainsmonoRegular: {
+//     fontFamily: "JetBrainsMono-Regular",
+//     fontSize: 20,
+//   },
+// });
 
 function startTimer(state) {
   const { timerVal, setTimerVal } = state;
@@ -129,12 +151,3 @@ function handleReset(state) {
 //   startTimer(state);
 //   state.setRunState(runStates.running);
 // }
-
-const appStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
