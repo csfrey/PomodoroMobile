@@ -1,4 +1,9 @@
-import { View, Text, useWindowDimensions, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  useWindowDimensions,
+  TouchableOpacity,
+} from "react-native";
 import { buttonTypes, runStates, styles } from "../constants";
 
 const Buttons = (props) => {
@@ -6,8 +11,20 @@ const Buttons = (props) => {
   const { state, onButtonClick } = props;
   const { runState } = state;
 
+  const baseText = {
+    fontFamily: "JetBrainsMono_400Regular",
+    textAlign: "center",
+    color: "black",
+  };
+
+  const baseBtn = {
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+  };
+
   let start = (
-    <Pressable
+    <TouchableOpacity
       style={{
         height: "100%",
         width: "100%",
@@ -19,15 +36,13 @@ const Buttons = (props) => {
       <Text
         className="start-btn"
         style={{
-          fontFamily: "JetBrainsMono_400Regular",
-          color: "black",
+          ...baseText,
           fontSize: width / 8,
-          textAlign: "center",
         }}
       >
         START
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 
   let pause = (
@@ -38,27 +53,23 @@ const Buttons = (props) => {
         width: "100%",
       }}
     >
-      <Pressable
+      <TouchableOpacity
         style={{
-          flex: 1,
-          height: "100%",
-          justifyContent: "center",
+          ...baseBtn,
           backgroundColor: styles.yellow,
         }}
         onPress={() => onButtonClick(buttonTypes.pause)}
       >
         <Text
           style={{
-            fontFamily: "JetBrainsMono_400Regular",
-            color: "black",
+            ...baseText,
             fontSize: width / 12,
-            textAlign: "center",
           }}
         >
           PAUSE
         </Text>
-      </Pressable>
-      <Pressable
+      </TouchableOpacity>
+      <TouchableOpacity
         style={{
           flex: 1,
           height: "100%",
@@ -69,15 +80,13 @@ const Buttons = (props) => {
       >
         <Text
           style={{
-            fontFamily: "JetBrainsMono_400Regular",
-            color: "black",
+            ...baseText,
             fontSize: width / 12,
-            textAlign: "center",
           }}
         >
           SKIP
         </Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 
@@ -89,7 +98,7 @@ const Buttons = (props) => {
         width: "100%",
       }}
     >
-      <Pressable
+      <TouchableOpacity
         style={{
           flex: 1,
           height: "100%",
@@ -100,16 +109,14 @@ const Buttons = (props) => {
       >
         <Text
           style={{
-            fontFamily: "JetBrainsMono_400Regular",
-            color: "black",
+            ...baseText,
             fontSize: width / 12,
-            textAlign: "center",
           }}
         >
           CONTINUE
         </Text>
-      </Pressable>
-      <Pressable
+      </TouchableOpacity>
+      <TouchableOpacity
         style={{
           flex: 1,
           height: "100%",
@@ -120,15 +127,13 @@ const Buttons = (props) => {
       >
         <Text
           style={{
-            fontFamily: "JetBrainsMono_400Regular",
-            color: "black",
+            ...baseText,
             fontSize: width / 12,
-            textAlign: "center",
           }}
         >
           RESET
         </Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 
